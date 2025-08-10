@@ -1,6 +1,6 @@
 import type { Movie, RawTMDBMovie } from "./types";
 
-const BASE_URL: string = import.meta.env.VITE_;
+const BASE_URL: string = import.meta.env.VITE_BASE_URL;
 const API_KEY: string = import.meta.env.VITE_API_KEY;
 
 export async function popularMovies(): Promise<Movie[]> {
