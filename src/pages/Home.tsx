@@ -1,15 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MovieCard from "../components/MovieCard";
 import type { Movie } from "../types";
+import { popularMovies } from "../api";
 
 function Home() {
-  const [searchTerm, setSearchTerm] = useState("");  
+  const [searchTerm, setSearchTerm] = useState<string>(""); 
+  const [movies, setMovies] = useState<Movie[]>([]);
 
-  const movies: Movie[] = [
-    {id: 1, title: "Palmer", release_date: "2021"},
-    {id: 2, title: "Blackout", release_date: "2022"},
-    {id: 3, title: "Jules", release_date: "2023"}
-  ];
+  const loadPopularMovies = async () => {
+    try {
+      const popularMoviesResult = await popularMovies();
+      setMovies(popularMoviesResult);
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    loadPopularMovies();
+  }, []);
 
   const handleSearch = (e: React.FormEvent): void => {
     e.preventDefault();
