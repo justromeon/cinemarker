@@ -6,7 +6,7 @@ function MovieCard({movie}: {movie:Movie}) {
 
   return (
     <div className="relative rounded-lg overflow-hidden bg-[#1a1a1a] transition-transform duration-200 h-full flex flex-col hover:-translate-y-1">
-      <div className="relative aspect-w-2 aspect-h-3 w-full">
+      <div className="relative aspect-[2/3] w-full">
         <img className="w-full h-full object-cover" src={movie.url} alt={movie.title} />
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/80 opacity-0 transition-opacity duration-200 flex flex-col justify-end p-4 hover:opacity-100">
           <button

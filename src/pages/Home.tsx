@@ -36,7 +36,7 @@ function Home() {
         </button>
       </form>
 
-      <div>
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6 p-4 w-full box-border">
         {movies.map(m => 
           <MovieCard movie={m} key={m.id} />
         )}
