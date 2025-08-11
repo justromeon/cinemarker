@@ -16,7 +16,7 @@ export async function popularMovies(): Promise<Movie[]> {
   }));
 }
 
-export async function SearchMovies(searchTerm:string): Promise<Movie[]> {
+export async function searchMovies(searchTerm:string): Promise<Movie[]> {
 
   const response = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${searchTerm}`);    
   const data = await response.json();
