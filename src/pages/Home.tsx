@@ -1,19 +1,30 @@
 import { useEffect, useState } from "react";
 import MovieCard from "../components/MovieCard";
+import Spinner from "../components/Spinner";
 import type { Movie } from "../types";
 import { popularMovies } from "../api";
 
 function Home() {
   const [searchTerm, setSearchTerm] = useState<string>(""); 
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [err, setErr] = useState<string>("");
 
-  const loadPopularMovies = async () => {
+  const loadPopularMovies = async (): Promise<void> => {
+    setIsLoading(true);
+    setErr("");
+
     try {
-      const popularMoviesResult = await popularMovies();
+      const popularMoviesResult: Movie[] = await popularMovies();
       setMovies(popularMoviesResult);
 
     } catch (error) {
-      console.error(error);
+      const newError = error instanceof Error ? error.message : "Unkown error occured";
+      console.log(newError);
+      setErr("Failed load movies, check your internet connection or try again later");
+    
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -46,11 +57,21 @@ function Home() {
         </button>
       </form>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6 p-4 w-full box-border">
-        {movies.map(m => 
-          <MovieCard movie={m} key={m.id} />
-        )}
-      </div>
+      {isLoading ? (
+        <Spinner />
+
+      ) : err ? (
+        <div className="text-red-500">{err}</div>
+
+      ) : (
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6 p-4 w-full box-border">
+          {movies.map(m => 
+            <MovieCard movie={m} key={m.id} />
+          )}
+        </div>
+      )}
+
+
     </div>
   );
 }
