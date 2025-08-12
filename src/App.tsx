@@ -2,11 +2,12 @@ import NavBar from './components/NavBar'
 import Favorites from './pages/Favorites'
 import Home from './pages/Home'
 import {Routes, Route} from 'react-router-dom'
+import { FavoriteProvider } from './contexts/FavoriteProvider'
 
 function App() {
 
   return (
-    <div>
+    <FavoriteProvider>
       <NavBar />
       
       <main className='flex-1 p-8 box-border w-full flex flex-col'>
@@ -15,7 +16,7 @@ function App() {
           <Route path='/favorites' element={<Favorites />} />
         </Routes>
       </main>
-    </div>
+    </FavoriteProvider>
   )
 }
 
