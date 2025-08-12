@@ -18,7 +18,7 @@ export async function popularMovies(): Promise<Movie[]> {
 
 export async function searchMovies(searchTerm:string): Promise<Movie[]> {
 
-  const response = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${searchTerm}`);    
+  const response = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(searchTerm)}`);    
   const data = await response.json();
 
   return data.results.map((raw: RawTMDBMovie) => ({
