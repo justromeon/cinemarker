@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import MovieCard from "../components/MovieCard";
 import Spinner from "../components/Spinner";
 import type { Movie } from "../types";
-import { popularMovies } from "../api";
+import { popularMovies, searchMovies } from "../api";
 
 function Home() {
   const [searchTerm, setSearchTerm] = useState<string>(""); 
@@ -19,8 +19,7 @@ function Home() {
       setMovies(popularMoviesResult);
 
     } catch (error) {
-      const newError = error instanceof Error ? error.message : "Unkown error occured";
-      console.log(newError);
+      console.log(error);
       setErr("Failed load movies, check your internet connection or try again later");
     
     } finally {
@@ -32,10 +31,23 @@ function Home() {
     loadPopularMovies();
   }, []);
 
-  const handleSearch = (e: React.FormEvent): void => {
+  const handleSearch = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    alert(searchTerm);
-    setSearchTerm("");
+    if (isLoading) return;
+    setIsLoading(true);
+    setErr("");
+
+    try {
+      const searchResults: Movie[] = await (!searchTerm.trim() ? popularMovies() : searchMovies(searchTerm));
+      setMovies(searchResults);
+    
+    } catch (error) {
+      console.log(error);
+      setErr("Cannot search movies...");
+      
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -61,8 +73,11 @@ function Home() {
         <Spinner />
 
       ) : err ? (
-        <div className="text-red-500">{err}</div>
+        <div className="text-red-500 text-center">{err}</div>
 
+      ) : movies.length === 0 ? (
+        <h1 className="text-center">No movies found</h1>
+      
       ) : (
         <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6 p-4 w-full box-border">
           {movies.map(m => 
